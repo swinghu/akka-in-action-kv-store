@@ -14,7 +14,7 @@ import KeyValueStoreMessages._
 class KeyValueStoreActorSpec extends Specification with NoTimeConversions {
 
   "The KeyValueStoreActor" should {
-    "Be able to store a String value using a String key" in new AkkaTestkitContext() {
+    "Support storing and then getting a String value using a String key" in new AkkaTestkitContext() {
       val actor = system.actorOf(Props[KeyValueStoreActor])
 
       actor ! Put("key", "value")
@@ -25,7 +25,7 @@ class KeyValueStoreActorSpec extends Specification with NoTimeConversions {
       v must beSome(Value("value"))
     }
 
-    "Be able to get a key that does not exists and receive None" in new AkkaTestkitContext() {
+    "Respond with None when getting a key that does not exists" in new AkkaTestkitContext() {
       val actor = system.actorOf(Props[KeyValueStoreActor])
 
       actor ! Get("key")
@@ -35,7 +35,7 @@ class KeyValueStoreActorSpec extends Specification with NoTimeConversions {
       v must beNone
     }
 
-    "Be able to store a String value using a String key and prduce a stored event" in new AkkaTestkitContext() {
+    "Produce a ValueStored event when a value is stored" in new AkkaTestkitContext() {
       system.eventStream.subscribe(testActor, classOf[ValueStored])
 
       val actor = system.actorOf(Props[KeyValueStoreActor])
