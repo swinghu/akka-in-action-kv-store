@@ -11,7 +11,7 @@ version := "0.1"
 scalaVersion := "2.10.3"
 
 scalacOptions := Seq("-encoding", "utf8",
-                     "-target:jvm-1.6",
+                     "-target:jvm-1.7",
                      "-feature",
                      "-language:implicitConversions",
                      "-language:postfixOps",

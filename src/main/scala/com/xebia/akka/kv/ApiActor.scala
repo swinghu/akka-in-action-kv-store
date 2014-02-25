@@ -1,4 +1,4 @@
-package com.xebia.aka.kv
+package com.xebia.akka.kv
 
 import akka.actor._
 

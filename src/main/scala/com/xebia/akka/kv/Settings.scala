@@ -1,4 +1,4 @@
-package com.xebia.aka.kv
+package com.xebia.akka.kv
 
 import com.typesafe.config.Config
 
@@ -6,18 +6,8 @@ import akka.actor._
 
 
 class Settings(config: Config) extends Extension {
-
   object Http {
     val Port = config.getInt("akka-kv.http.port")
-  }
-
-
-
-  private implicit class EnhancedConfig(config: Config) {
-    def getOptionalString(path: String): Option[String] = {
-      if (config.hasPath(path)) Some(config.getString(path))
-      else None
-    }
   }
 }
 
