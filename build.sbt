@@ -45,7 +45,7 @@ libraryDependencies ++= {
     "ch.qos.logback"          %   "logback-classic"        % "1.1.1",
     "com.typesafe.akka"       %%  "akka-testkit"           % akkaVersion    % "test",
     "io.spray"                %   "spray-testkit"          % sprayVersion   % "test",
-    "org.specs2"              %%  "specs2-core"            % "2.3.8"        % "test"
+    "org.specs2"              %%  "specs2-core"            % "2.3.10"       % "test"
   )
 }
 
