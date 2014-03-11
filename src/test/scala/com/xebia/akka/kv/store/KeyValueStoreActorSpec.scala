@@ -20,9 +20,7 @@ class KeyValueStoreActorSpec extends Specification with NoTimeConversions {
       actor ! Put("key", "value")
       actor ! Get("key")
 
-      val v = expectMsgType[Option[Value]]
-
-      v must beSome(Value("value"))
+      expectMsgType[Option[Value]] must beSome(Value("value"))
     }
 
     "Respond with None when getting a key that does not exists" in new AkkaTestkitContext() {
@@ -30,9 +28,7 @@ class KeyValueStoreActorSpec extends Specification with NoTimeConversions {
 
       actor ! Get("key")
 
-      val v = expectMsgType[Option[Value]]
-
-      v must beNone
+      expectMsgType[Option[Value]] must beNone
     }
 
     "Produce a ValueStored event when a value is stored" in new AkkaTestkitContext() {
@@ -42,9 +38,18 @@ class KeyValueStoreActorSpec extends Specification with NoTimeConversions {
 
       actor ! Put("key", "value")
 
-      val v = expectMsgType[ValueStored]
+      expectMsgType[ValueStored] must beEqualTo(ValueStored("key", "value"))
+    }
 
-      v must beEqualTo(ValueStored("key", "value"))
+    "Support storing multiple values for a key and getting only the last value back" in new AkkaTestkitContext() {
+      val actor = system.actorOf(Props(classOf[KeyValueStoreActor]))
+
+      actor ! Put("key", "value1")
+      actor ! Put("key", "value2")
+      actor ! Put("key", "value3")
+      actor ! Get("key")
+
+      expectMsgType[Option[Value]] must beSome(Value("value3"))
     }
   }
 
