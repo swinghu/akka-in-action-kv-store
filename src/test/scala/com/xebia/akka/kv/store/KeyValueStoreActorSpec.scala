@@ -17,8 +17,8 @@ class KeyValueStoreActorSpec extends Specification with NoTimeConversions {
     "Support storing and then getting a String value using a String key" in new AkkaTestkitContext() {
       val actor = system.actorOf(Props[KeyValueStoreActor])
 
-      actor ! Put("key", "value")
-      actor ! Get("key")
+      actor ! Put("bucket", "key", "value")
+      actor ! Get("bucket", "key")
 
       expectMsgType[Option[Value]] must beSome(Value("value"))
     }
@@ -26,30 +26,56 @@ class KeyValueStoreActorSpec extends Specification with NoTimeConversions {
     "Respond with None when getting a key that does not exists" in new AkkaTestkitContext() {
       val actor = system.actorOf(Props[KeyValueStoreActor])
 
-      actor ! Get("key")
+      actor ! Get("bucket", "key")
 
       expectMsgType[Option[Value]] must beNone
     }
 
     "Produce a ValueStored event when a value is stored" in new AkkaTestkitContext() {
-      system.eventStream.subscribe(testActor, classOf[ValueStored])
-
       val actor = system.actorOf(Props[KeyValueStoreActor])
 
-      actor ! Put("key", "value")
+      system.eventStream.subscribe(testActor, classOf[ValueStored])
 
-      expectMsgType[ValueStored] must beEqualTo(ValueStored("key", "value"))
+      actor ! Put("bucket", "key", "value")
+
+      expectMsgType[ValueStored] must beEqualTo(ValueStored("bucket", "key", "value"))
     }
 
     "Support storing multiple values for a key and getting only the last value back" in new AkkaTestkitContext() {
       val actor = system.actorOf(Props(classOf[KeyValueStoreActor]))
 
-      actor ! Put("key", "value1")
-      actor ! Put("key", "value2")
-      actor ! Put("key", "value3")
-      actor ! Get("key")
+      actor ! Put("bucket", "key", "value1")
+      actor ! Put("bucket", "key", "value2")
+      actor ! Put("bucket", "key", "value3")
+      actor ! Get("bucket", "key")
 
       expectMsgType[Option[Value]] must beSome(Value("value3"))
+    }
+
+    "Support putting the same key in different buckets" in new AkkaTestkitContext {
+      val actor = system.actorOf(Props(classOf[KeyValueStoreActor]))
+
+      actor ! Put("bucket1", "key", "value1")
+      actor ! Put("bucket2", "key", "value2")
+
+      actor ! Get("bucket1", "key")
+
+      expectMsgType[Option[Value]] must beSome(Value("value1"))
+
+      actor ! Get("bucket2", "key")
+
+      expectMsgType[Option[Value]] must beSome(Value("value2"))
+    }
+
+    "Be able to produce a set of current buckets" in new AkkaTestkitContext {
+      val actor = system.actorOf(Props(classOf[KeyValueStoreActor]))
+
+      actor ! Put("bucket1", "key", "value1")
+      actor ! Put("bucket2", "key", "value2")
+
+      actor ! ListBuckets
+
+      expectMsgType[Set[String]] === Set("bucket1", "bucket2")
     }
   }
 

@@ -5,27 +5,33 @@ import akka.actor._
 
 
 object KeyValueStoreMessages {
-  case class Put(key: String, value: String)
-  case class Get(key: String)
+  case class Put(bucket: String, key: String, value: String)
+  case class Get(bucket: String, key: String)
   case class Value(value: String)
 
-  case class ValueStored(key: String, value: String)
+  case object ListBuckets
+
+  case class ValueStored(bucket: String, key: String, value: String)
 }
 
 
 class KeyValueStoreActor extends Actor with ActorLogging {
   import KeyValueStoreMessages._
-  import context._
-
-  private var data = Map.empty[String, String]
+  import BucketMessages._
 
   def receive = {
-    case Put(key, value) => {
-      data += (key -> value)
-
-      system.eventStream.publish(ValueStored(key, value))
-    }
-
-    case Get(key) => sender ! data.get(key).map(Value(_))
+    case Put(bucket, key, value) => getOrCreateBucketActor(bucket).forward(BucketPut(key, value))
+    case Get(bucket, key)        => getOrCreateBucketActor(bucket).forward(BucketGet(key))
+    case ListBuckets             => sender ! listBuckets
   }
+
+  private def getOrCreateBucketActor(bucket: String) = {
+    val name = s"${bucket}-${self.path.name}-bucket"
+    context.child(name).getOrElse(context.actorOf(Props(classOf[BucketActor], bucket), name))
+  }
+
+  private def listBuckets = context.children
+                                   .filter(_.path.name.endsWith("-bucket"))
+                                   .map(_.path.name.takeWhile(_ != '-'))
+                                   .toSet
 }
