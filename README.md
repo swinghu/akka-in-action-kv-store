@@ -1,8 +1,20 @@
-# Akka In Action - Building a Key-Value Store
+# Akka & Spray In Action - A Series of Live Coding Sessions
 
-## Draft Schedule:
+This repository contains a work in progress [Akka](http://akka.io/) /
+[Spray](http://spray.io/) workshop currently being given inside Xebia as a
+series of live-coding sessions. The idea is to test this stuff on our own
+people, followed by turning it into an open and/or commercial training.
 
-### Discussed in Lesson 1
+The subject and end goal for this series is to build a simplistic Key-Value
+Store loosely based on [Riak](http://basho.com/riak/). The resulting KV store
+will **not** be in any way safe for production usage and it is quite likely it
+will loose all your data, but that's beside the point. It is eventually
+complete, with "eventually" slowly but surely approaching "never".
+
+
+## Schedule:
+
+### Session 1 (2014-02-25)
 
 - Basic project setup, SBT, etc.
 - Basic KV actor
@@ -12,20 +24,24 @@
 - Using a Settings extension
 
 
-### Discussed in Lesson 2
+### Session 2 (2014-03-11)
 
 - Add support for KV buckets using child actors
 - Adjust the tests
 - The basics of Spray (i.e. Akka Http)
 
 
-### To be discussed (DRAFT)
+### Plan for next session (2014-04-08)
+
+- Testing Spray routes
+- Add a basic Spray REST-api for getting and putting keys and values
+
+
+### Upcoming Topics
 
 This list of topics can be as long as people want.
 Please send a PR or open an issue if you want to add topics
 
-- Add a basic Spray REST-api for getting and putting keys and values
-- Testing Spray routes
 - ways of connection spray routes with actors
     - Futures vs Single-use actors
 - Advanced Spray features
