@@ -1,5 +1,4 @@
 package com.xebia.akka.kv
-package store
 
 import org.specs2.mutable.Specification
 import org.specs2.time.NoTimeConversions
@@ -8,7 +7,7 @@ import akka.actor._
 import akka.testkit._
 
 import TestSupport._
-import KeyValueStoreMessages._
+import KeyValueStoreEvents._
 import BucketMessages._
 
 

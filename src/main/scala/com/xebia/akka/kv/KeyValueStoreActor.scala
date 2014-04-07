@@ -1,16 +1,19 @@
 package com.xebia.akka.kv
-package store
 
 import akka.actor._
+
+
+case class Value(value: String)
 
 
 object KeyValueStoreMessages {
   case class Put(bucket: String, key: String, value: String)
   case class Get(bucket: String, key: String)
-  case class Value(value: String)
 
   case object ListBuckets
+}
 
+object KeyValueStoreEvents {
   case class ValueStored(bucket: String, key: String, value: String)
 }
 

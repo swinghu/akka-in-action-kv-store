@@ -1,5 +1,4 @@
 package com.xebia.akka.kv
-package store
 
 import akka.actor._
 
@@ -11,7 +10,7 @@ object BucketMessages {
 
 
 class BucketActor(bucket: String) extends Actor with ActorLogging {
-  import KeyValueStoreMessages._
+  import KeyValueStoreEvents._
   import BucketMessages._
   import context._
 
