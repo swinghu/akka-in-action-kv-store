@@ -35,6 +35,11 @@ complete, with "eventually" slowly but surely approaching "never".
 
 - Testing Spray routes
 - Add a basic Spray REST-api for getting and putting keys and values
+    - Matching paths and prefixes
+    - Extracting path elements
+- ways of connection spray routes with actors
+    - Creating actors from Spray
+    - Futures vs single-use actors
 
 
 ### Upcoming Topics
@@ -42,8 +47,6 @@ complete, with "eventually" slowly but surely approaching "never".
 This list of topics can be as long as people want.
 Please send a PR or open an issue if you want to add topics
 
-- ways of connection spray routes with actors
-    - Futures vs Single-use actors
 - Advanced Spray features
     - Advanced routing DSL
     - Modularizing your routes using traits
